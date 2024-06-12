@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>menu tabs</title>
+</head>
+<body>
+    <div id="app">
+        <div class="first-menu-box">
+            <ul>
+                <li @click="handleClickFirstMenu(item.id)" v-for="(item, index) in firstMenuData" :key="index">{{item.title}}</li>
+            </ul>
+        </div>
+
+        <div class="second-menu-box">
+          {{JSON.stringify([`secondMenuData${curfirstMenuId}`])}}
+            <ul>
+              <!-- <li v-if="(item, index) in `secondMenuData${curfirstMenuId}`" :key="index">{{item.title}}</li> -->
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+<script src="https://cdn.staticfile.org/vue/3.0.5/vue.global.js"></script>
+<script>
+  const { ref, onBeforeMount } = Vue;
+  const App = {
+    setup() {
+      const firstMenuData = ref([
+          {
+              title: '奇瑞',
+              id: 1
+          },
+          {
+              title: '吉利',
+              id: 2
+          },
+          {
+              title: '小米',
+              id: 3
+          }
+        ]);
+
+        const secondMenuData1 = ref([
+            {
+              title: '奇瑞',
+              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
+            },
+            {
+              title: '奇瑞',
+              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
+            },
+            {
+              title: '奇瑞',
+              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
+            },
+            {
+              title: '奇瑞',
+              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
+            }
+        	]);
+
+          const secondMenuData2 = ref([
+            {
+              title: '吉利',
+              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
+            },
+            {
+              title: '吉利',
+              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
+            },
+            {
+              title: '吉利',
+              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
+            },
+            {
+              title: '吉利',
+              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
+            }
+        	]);
+
+          const secondMenuData3 = ref([
+            {
+              title: '小米',
+              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
+            },
+            {
+              title: '小米',
+              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
+            },
+            {
+              title: '小米',
+              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
+            },
+            {
+              title: '小米',
+              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
+            }
+        	]);
+
+          let curfirstMenuId = ref(1)
+
+          const handleClickFirstMenu = (id) => {
+            curfirstMenuId.value = id
+            console.log('mkmk1111', curfirstMenuId.value)
+          }
+
+          onBeforeMount(() => {
+            console.log('This will run right before mounting');
+          });
+          
+
+
+          return {
+              firstMenuData,
+              secondMenuData1,
+              secondMenuData2,
+              secondMenuData3,
+              curfirstMenuId,
+              handleClickFirstMenu
+          };
+    }
+  }
+  Vue.createApp(App).mount('#app');
+  </script>
