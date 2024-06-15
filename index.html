@@ -5,18 +5,134 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>menu tabs</title>
 </head>
+<style>
+  [v-cloak]{
+    display:none;
+  } 
+  /*样式重置*/
+  *{
+    margin:0;
+    padding: 0;
+  }
+  ul,ol,li{
+    list-style: none;
+  }
+  /*一级盒子样式*/
+  .first-menu-box ul{
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    border-bottom: 1px solid #ccc;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  }
+  .first-menu-box li.curClass {
+    color: #e60021;
+    font-weight:bold;
+  }
+  .first-menu-box li {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  .first-menu-box li a{
+    cursor: pointer;
+    position: relative;
+  }
+  .first-menu-box li a:hover{
+    color: #e60021;
+    font-weight:bold;
+  }
+  .first-menu-box li a::before{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -10px;
+    left: 0;
+    background-color: #e60021;
+    visibility: hidden;
+    -webkit-transform: scaleX(0);
+    transform: scaleX(0);
+    -webkit-transition: all 0.3s ease-in-out 0s;
+    transition: all 0.3s ease-in-out 0s;
+  }
+  .first-menu-box li a:hover::before{
+    visibility: visible;
+  -webkit-transform: scaleX(1);
+  transform: scaleX(1);
+  }
+  /*二级盒子样式*/
+  .second-menu-box{
+    background: #fff;
+    margin-top: 10px;
+  }
+  .second-menu-box ul {
+    width:90%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .second-menu-box ul li {
+    flex: 1 0 16.66667%; /* 100 / 6 = 16.66667% */
+    max-width: 16.66667%;
+    margin: 10px 0;
+    cursor: pointer;
+  }
+  .second-menu-box ul li img{
+    width: 100%;
+    height: 100%;
+    -webkit-transition: -webkit-transform .3s linear;
+    transition: -webkit-transform .3s linear;
+    transition: transform .3s linear;
+    transition: transform .3s linear,-webkit-transform .3s linear;
+  }
+  .second-menu-box ul li img:hover{
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1)
+  }
+  .second-menu-box ul li:hover .carName{
+    color: #e60021;
+  }
+  /*文本超出*/
+  .txt-ellipsis {
+    white-space: nowrap;  /* 不换行 */
+    overflow: hidden;    /* 隐藏超出的内容 */
+    text-overflow: ellipsis; /* 超出部分显示为省略号 */
+    width: 100%; /* 设置宽度 */
+  }
+  .txtc{
+    text-align: center;
+  }
+</style>
 <body>
-    <div id="app">
+    <div id="app" v-cloak v-click-outside="handleClickOutside">
         <div class="first-menu-box">
             <ul>
-                <li @click="handleClickFirstMenu(item.id)" v-for="(item, index) in firstMenuData" :key="index">{{item.title}}</li>
+                <li 
+                :class="{'curClass': curfirstMenuId === index + 1}" 
+                @click="handleClickFirstMenu(item.id)" 
+                v-for="(item, index) in firstMenuData" 
+                :key="index"
+                @mouseenter="handleMouseEnter(item.id)" 
+                >
+                  <a>{{item.title}}</a >
+                </li>
             </ul>
         </div>
-
         <div class="second-menu-box">
-          {{JSON.stringify([`secondMenuData${curfirstMenuId}`])}}
-            <ul>
-              <!-- <li v-if="(item, index) in `secondMenuData${curfirstMenuId}`" :key="index">{{item.title}}</li> -->
+            <ul @mouseleave="handleMouseLeave">
+              <li 
+              v-for="(item, index) in secondMenuDataPoor[`m${curfirstMenuId}`]" 
+              :key="index"
+              >
+                <div><image :src="item.img" /></div>
+                <div class="carName txt-ellipsis txtc">{{item.title}}</div>
+              </li>
             </ul>
         </div>
     </div>
@@ -28,99 +144,53 @@
   const App = {
     setup() {
       const firstMenuData = ref([
-          {
-              title: '奇瑞',
-              id: 1
-          },
-          {
-              title: '吉利',
-              id: 2
-          },
-          {
-              title: '小米',
-              id: 3
-          }
-        ]);
-
-        const secondMenuData1 = ref([
-            {
-              title: '奇瑞',
-              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
-            },
-            {
-              title: '奇瑞',
-              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
-            },
-            {
-              title: '奇瑞',
-              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
-            },
-            {
-              title: '奇瑞',
-              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
-            }
-        	]);
-
-          const secondMenuData2 = ref([
-            {
-              title: '吉利',
-              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
-            },
-            {
-              title: '吉利',
-              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
-            },
-            {
-              title: '吉利',
-              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
-            },
-            {
-              title: '吉利',
-              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
-            }
-        	]);
-
-          const secondMenuData3 = ref([
-            {
-              title: '小米',
-              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
-            },
-            {
-              title: '小米',
-              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
-            },
-            {
-              title: '小米',
-              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
-            },
-            {
-              title: '小米',
-              images: 'https://www.gac-toyota.com.cn/2021/images/header/cat/c18.png'
-            }
-        	]);
-
-          let curfirstMenuId = ref(1)
-
-          const handleClickFirstMenu = (id) => {
-            curfirstMenuId.value = id
-            console.log('mkmk1111', curfirstMenuId.value)
-          }
-
-          onBeforeMount(() => {
-            console.log('This will run right before mounting');
-          });
-          
-
-
-          return {
-              firstMenuData,
-              secondMenuData1,
-              secondMenuData2,
-              secondMenuData3,
-              curfirstMenuId,
-              handleClickFirstMenu
-          };
-    }
-  }
-  Vue.createApp(App).mount('#app');
-  </script>
+      {
+          title: '奇瑞',
+          id: 1
+      },
+      {
+          title: '吉利',
+          id: 2
+      },
+      {
+          title: '大众',
+          id: 3
+      },
+      {
+          title: '长城',
+          id: 4
+      }
+    ]);
+    const secondMenuDataPoor = ref({
+      m1: [{
+          title: '瑞虎8',
+          img: 'https://youjia-image.cdn.bcebos.com/seriesImage/163584429747182b1a07.png@!w_600_fp'
+        },
+        {
+          title: '艾瑞泽8',
+          img: 'https://youjia-image.cdn.bcebos.com/seriesImage/16553640966143457414.png@!w_600_fp'
+        },
+        {
+          title: '瑞虎9',
+          img: 'https://youjia-image.cdn.bcebos.com/seriesImage/1670565553830712f505.png@!w_600_fp'
+        },
+        {
+          title: '风云T-9',
+          img: 'https://youjia-image.cdn.bcebos.com/seriesImage/16976008523167798db8.png@!w_600_fp'
+        }],
+      m2: [{
+          title: '星越L',
+          img: 'https://youjia-image.cdn.bcebos.com/seriesImage/16184887761514c3363c.png@!w_600_fp'
+        },
+        {
+          title: '缤越',
+          img: 'https://youjia-image.cdn.bcebos.com/seriesImage/16602735979708eddc6f.png@!w_600_fp'
+        },
+        {
+          title: '远景X6',
+          img: 'https://youjia-image.cdn.bcebos.com/seriesImage/1632898742466331420d.png@!w_600_fp'
+        },
+        {
+          title: '吉利ICON',
+          img: 'https://youjia-image.cdn.bcebos.com/seriesImage/1660703368970719c574.png@!w_600_fp'
+    
