@@ -120,7 +120,7 @@
                 :key="index"
                 @mouseenter="handleMouseEnter(item.id)" 
                 >
-                  <a>{{item.title}}</a >
+                  <a>{{item.title}}</a>
                 </li>
             </ul>
         </div>
@@ -193,4 +193,93 @@
         {
           title: '吉利ICON',
           img: 'https://youjia-image.cdn.bcebos.com/seriesImage/1660703368970719c574.png@!w_600_fp'
+        }],
+      m3: [{
+          title: '朗逸',
+          img: 'https://youjia-image.cdn.bcebos.com/seriesImage/16559915359897114ed4.png@!w_600_fp'
+        },
+        {
+          title: '迈腾',
+          img: 'https://youjia-image.cdn.bcebos.com/seriesImage/16250603806656ad7f51.png@!w_600_fp'
+        },
+        {
+          title: '帕萨特',
+          img: 'https://youjia-image.cdn.bcebos.com/seriesImage/16299764484925a2bca9.png@!w_600_fp'
+        },
+        {
+          title: '揽境',
+          img: 'https://youjia-image.cdn.bcebos.com/seriesImage/1607945454711388f5bc.png@!w_600_fp'
+        },
+        {
+          title: '辉昂',
+          img: 'https://youjia-image.cdn.bcebos.com/seriesImage/16250603708162aaec79.png@!w_600_fp'
+        },
+        {
+          title: '甲壳虫',
+          img: 'https://youjia-image.cdn.bcebos.com/seriesImage/16255687094738fcc973.png@!w_600_fp'
+        },
+        {
+          title: '途观L',
+          img: 'https://youjia-image.cdn.bcebos.com/seriesImage/1716807978356076e8c6.png@!w_600_fp'
+        }],
+      m4: [{
+          title: '长城炮',
+          img: 'https://youjia-image.cdn.bcebos.com/seriesImage/161519292370380e28bc.png@!w_600_fp'
+        },
+        {
+          title: '风骏5',
+          img: 'https://youjia-image.cdn.bcebos.com/seriesImage/16932983438783ab18f5.png@!w_600_fp'
+        },
+        {
+          title: '山海炮',
+          img: 'https://youjia-image.cdn.bcebos.com/seriesImage/1671437563754577f86d.png@!w_600_fp',
+        },
+        {
+          title: '风骏新能源',
+          img: 'https://youjia-image.cdn.bcebos.com/seriesImage/16246162178770fd6508.png@!w_600_fp'
+        }]
+    })
     
+      let curfirstMenuId = ref('')
+      const handleClickFirstMenu = (id) => {
+        curfirstMenuId.value = id
+      }
+      const handleMouseEnter = (id) => {
+        handleClickFirstMenu(id)
+      }
+      const handleMouseLeave = () => {
+        curfirstMenuId.value = ''
+      }
+      const handleClickOutside = () => {
+        console.log('handleClickOutside')
+      }
+      onBeforeMount(() => {
+        console.log('This will run right before mounting');
+      });
+      return {
+        firstMenuData,
+        secondMenuDataPoor,
+        curfirstMenuId,
+        handleClickFirstMenu,
+        handleMouseEnter,
+        handleMouseLeave,
+        handleClickOutside
+      };
+    }
+  }
+  Vue.createApp(App).directive('click-outside', {
+    beforeMount: (el, binding) => {
+      el.clickOutsideEvent = event => {
+        // 检查点击事件是否在元素内部发生
+        if (!(el === event.target || el.contains(event.target))) {
+          // 如果点击事件在元素外部发生，调用提供的方法
+          binding.value(event);
+        }
+      };
+      document.body.addEventListener('click', el.clickOutsideEvent);
+    },
+    unmounted: (el) => {
+      document.body.removeEventListener('click', el.clickOutsideEvent);
+    },
+  }).mount('#app');
+  </script>
