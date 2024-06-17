@@ -110,7 +110,7 @@
   }
 </style>
 <body>
-    <div id="app" v-cloak v-click-outside="handleClickOutside">
+    <div id="app" v-cloak>
         <div class="first-menu-box">
             <ul>
                 <li 
@@ -250,9 +250,6 @@
       const handleMouseLeave = () => {
         curfirstMenuId.value = ''
       }
-      const handleClickOutside = () => {
-        console.log('handleClickOutside')
-      }
       onBeforeMount(() => {
         console.log('This will run right before mounting');
       });
@@ -262,24 +259,9 @@
         curfirstMenuId,
         handleClickFirstMenu,
         handleMouseEnter,
-        handleMouseLeave,
-        handleClickOutside
+        handleMouseLeave
       };
     }
   }
-  Vue.createApp(App).directive('click-outside', {
-    beforeMount: (el, binding) => {
-      el.clickOutsideEvent = event => {
-        // 检查点击事件是否在元素内部发生
-        if (!(el === event.target || el.contains(event.target))) {
-          // 如果点击事件在元素外部发生，调用提供的方法
-          binding.value(event);
-        }
-      };
-      document.body.addEventListener('click', el.clickOutsideEvent);
-    },
-    unmounted: (el) => {
-      document.body.removeEventListener('click', el.clickOutsideEvent);
-    },
-  }).mount('#app');
+  Vue.createApp(App).mount('#app');
   </script>
